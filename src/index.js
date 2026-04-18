@@ -1,15 +1,15 @@
-import express from "express";
+import express from "express"
+
+const port = 8000;
 
 const app = express();
-const port = 8000;
 
 app.use(express.json());
 
 app.get("/" , (req , res) => {
-    res.send("Hello from Express")
+   res.send("hello from express server")
 })
 
 app.listen(port , () => {
-    console.log(`The server is running on http://localhost:${port}`);
-    
+  console.log(`The server is running on http://localhost:${port}`)
 })
