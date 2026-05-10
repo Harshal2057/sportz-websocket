@@ -4,7 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
@@ -19,40 +19,40 @@ enum MatchStatus {
   CANCELLED
 }
 
+
+
 model Match {
-  id String @id @default(uuid())
-  homeTeam String 
-  awayTeam String
-  sport String
-  startTime DateTime
-  status MatchStatus 
-  homeScore Int @default(0)
-  awayScore Int @default(0)
+  id          String @id @default(uuid())
+  sport       String
+  homeTeam    String
+  awayTeam    String
+  status      MatchStatus   @default(SCHEDULED)
+  startTime   DateTime?
+  endTime     DateTime?
+  homeScore   Int           @default(0)
+  awayScore   Int           @default(0)
+  createdAt   DateTime      @default(now())
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  commentary  Commentary[]
 
-  commentary Commentary[]
-
-  @@index([status])
-  @@index([startTime])
+  @@map("matches")
 }
 
 model Commentary {
-  commId String @id @default(uuid())
-
+  id         String @id @default(uuid())
   matchId String
+  minute     Int?
+  sequence   Int?
+  period     String?
+  eventType  String?
+  actor      String?
+  team       String?
+  message    String
+  metadata   Json?
+  tags       String[]
+  createdAt  DateTime  @default(now())
+
   match Match  @relation(fields: [matchId] , references: [id] , onDelete: Cascade)
-
-    actor      String   // who did it (player/team/referee)
-  message    String   // what happened
-  minute     Int      // when (game minute)
-  sequenceNo Int      // ordering (important for real-time)
-
-  details Json?
-
-  createdAt DateTime @default(now())
-
-  @@index([matchId])
-  @@index([sequenceNo])
+  
+  @@map("commentary")
 }
