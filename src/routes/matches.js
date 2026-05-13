@@ -49,11 +49,11 @@ MatchRouter.post("/" , async(req , res) => {
             })
 
             if (res.app.locals.broadcastMatchCreated) {
-                  res.app.locals.broadcastMatchCreated(event);
+                  res.app.locals.broadcastMatchCreated(match);
             }
 
             res.status(201).json({message: "Match created successfully" , data: match})
     } catch (error) {
-         return res.status(400).json({error: "Failed to create match" , details: JSON.stringify(error)})
+         return res.status(400).json({error: "Failed to create match" , details: error.message})
     }
 })
