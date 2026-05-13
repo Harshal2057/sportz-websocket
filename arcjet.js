@@ -15,7 +15,7 @@ export const httpArject = arjectKey ?
         ]
     }) : null;
 
-export const wsArject = arjectKey ?
+export const wsArcjet = arjectKey ?
     arcjet({
         key:arjectKey,
         rules:[
@@ -28,6 +28,9 @@ export const wsArject = arjectKey ?
 
 export function securityMiddleware(){
     return async(req , res , next) => {
+
+          console.log("Security middleware running");
+
         if(!httpArject) return next();
 
         
@@ -35,6 +38,7 @@ export function securityMiddleware(){
             const decision = await httpArject.protect(req);
 
             if(decision.isDenied()) {
+                console.log(decision);
                 if(decision.reason.isRateLimit()) {
                     return res.status(429).json({ error: 'Too many requests.' });
                 }
